@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="297.0" prefWidth="685.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.EstadosListController">
+   <children>
+      <Label text="Cadastro de Estados">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <ToolBar prefHeight="40.0" prefWidth="200.0">
+        <items>
+          <Button fx:id="btNovo" mnemonicParsing="false" onAction="#acaoBotaoNovo" text="Novo" />
+        </items>
+      </ToolBar>
+      <TableView fx:id="tableViewEstados" prefHeight="200.0" prefWidth="200.0">
+        <columns>
+          <TableColumn fx:id="columnId" prefWidth="75.0" text="Id" />
+          <TableColumn fx:id="columnNome" prefWidth="75.0" text="Nome" />
+            <TableColumn fx:id="columnUf" prefWidth="75.0" text="UF" />
+        </columns>
+      </TableView>
+   </children>
+</VBox>
