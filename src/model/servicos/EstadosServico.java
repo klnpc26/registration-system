@@ -23,7 +23,7 @@ public class EstadosServico {// Serviço relacionado com operações das entidades
         }
     }
     
-    public void remover(Estados obj){
+    public void remover(Estados obj){ // Remover Estados no Banco de Dados
         dao.excluir(obj);
     }
 }

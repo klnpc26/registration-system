@@ -5,7 +5,9 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import JDBC.BdException;
 import app.appFx;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,6 +17,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -43,6 +46,12 @@ public class EstadosListController implements Initializable, MudancaDados{ // A 
 	
 	@FXML
 	private TableColumn<Estados, String> columnUf;
+	
+	@FXML
+	private TableColumn<Estados, Estados> tableColumnEDITAR;
+	
+	@FXML
+	private TableColumn<Estados, Estados> tableColumnREMOVER;
 	
 	private ObservableList<Estados> obsList;//Carrega os estados
 	
@@ -79,6 +88,8 @@ public class EstadosListController implements Initializable, MudancaDados{ // A 
 		List<Estados> list = servico.encontrarTudo();// Pegou a lista de Estados
 		obsList = FXCollections.observableArrayList(list);// joga os Estados carregados dentro do obsList
 		tableViewEstados.setItems(obsList);// Mostra os estados na tabela
+		botaoEditar();
+		botaoRemover();
 	}
 	
 	private void formDialogo(Estados obj, String absoluteName, Stage parentStage) {
@@ -109,5 +120,58 @@ public class EstadosListController implements Initializable, MudancaDados{ // A 
 	@Override
 	public void mudancaDeDados() {
 		atualizaTabela();
+	}
+	
+	public void botaoEditar() { // criar um botão de edição em cada linha da tabela
+		tableColumnEDITAR.setCellValueFactory(x -> new ReadOnlyObjectWrapper<>(x.getValue()));
+		tableColumnEDITAR.setCellFactory(x -> new TableCell<Estados, Estados>() {
+				private final Button bt = new Button("Editar");
+				
+				@Override
+				protected void updateItem(Estados obj, boolean vazia) {
+					super.updateItem(obj, vazia);
+					
+					if(obj == null) {
+						setGraphic(null);
+						return;
+					}
+					setGraphic(bt);
+					bt.setOnAction(
+					evento -> formDialogo(
+							obj, "/view/EstadosForm.fxml", (Stage) ((Node) evento.getSource()).getScene().getWindow()));// Quando clicar no botão "Editar" vai abrir o formulário de edição
+				}
+		});
+	}
+	
+	public void botaoRemover() {
+		tableColumnREMOVER.setCellValueFactory(x -> new ReadOnlyObjectWrapper<>(x.getValue()));
+		tableColumnREMOVER.setCellFactory(x -> new TableCell<Estados, Estados>() {
+			private final Button bt = new Button("Remover");
+			
+			@Override
+			protected void updateItem(Estados obj, boolean vazia) {
+				super.updateItem(obj, vazia);
+				
+				if(obj == null) {
+					setGraphic(null);
+					return;
+				}
+				setGraphic(bt);
+				bt.setOnAction(x -> removeEntidade(obj));// Quando clicar no botão "Remover" vai remover Estados
+			}
+	});
+}
+	
+	protected void removeEntidade(Estados obj) {
+		if(servico == null) {
+			throw new IllegalStateException("Serviço nulo");
+		}
+		try {
+			servico.remover(obj);
+			atualizaTabela();
+		}
+		catch(BdException e) {
+			e.printStackTrace();
+		}
 	}
 }
