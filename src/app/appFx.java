@@ -10,13 +10,13 @@ import javafx.stage.Stage;
 
 public class appFx extends Application {
 	
-	private static Scene mainScene;
+	private static Scene mainScene;// guarda a referência no mainScene
 	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/PrincipalView.fxml"));
-			ScrollPane scrollPane = loader.load();
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Principal.fxml"));
+			ScrollPane scrollPane = loader.load();//role o conteúdo, deslocando a janela de visualização ou usando barras de rolagem
 			
 			scrollPane.setFitToHeight(true);
 			scrollPane.setFitToWidth(true);
@@ -31,7 +31,7 @@ public class appFx extends Application {
 	}
 
 	public static Scene getMainScene() {
-		return mainScene;
+		return mainScene;// pega a referência
 	}
 	
 	public static void main(String[] args) {

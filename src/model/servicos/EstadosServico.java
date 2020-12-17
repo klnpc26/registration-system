@@ -6,7 +6,7 @@ import dao.DaoFactory;
 import dao.EstadosDao;
 import model.entidades.Estados;
 
-public class EstadosServico {
+public class EstadosServico {// Serviço relacionado com operações das entidades
     
     private EstadosDao dao = DaoFactory.createEstadosDao();
     
@@ -14,7 +14,7 @@ public class EstadosServico {
         return dao.encontrarTudo();
     }
     
-    public void salvarOuEditar(Estados obj){
+    public void salvarOuEditar(Estados obj){ // Vê se inseri ou atualiza
         if(obj.getId() == null){
             dao.inserir(obj);
         }

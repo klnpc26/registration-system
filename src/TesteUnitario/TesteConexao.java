@@ -1,6 +1,6 @@
 package TesteUnitario;
 
-import ConnDB.CDB;
+import JDBC.CDB;
 
 public class TesteConexao {
 

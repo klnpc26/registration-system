@@ -1,4 +1,4 @@
-package ConnDB;
+package JDBC;
 
 public class BdException extends RuntimeException{
     

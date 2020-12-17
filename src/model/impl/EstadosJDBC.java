@@ -7,8 +7,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ConnDB.BdException;
-import ConnDB.CDB;
+import JDBC.BdException;
+import JDBC.CDB;
 import dao.EstadosDao;
 import model.entidades.Estados;
 

@@ -1,6 +1,6 @@
 package dao;
 
-import ConnDB.CDB;
+import JDBC.CDB;
 import model.impl.EstadosJDBC;
 
 public class DaoFactory {
