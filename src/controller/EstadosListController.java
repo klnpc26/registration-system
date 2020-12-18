@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import JDBC.BdException;
@@ -16,7 +17,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -27,6 +30,7 @@ import javafx.stage.Stage;
 import listerner.MudancaDados;
 import model.entidades.Estados;
 import model.servicos.EstadosServico;
+import util.Alerta;
 
 public class EstadosListController implements Initializable, MudancaDados{ // A classe que RECEBE o evento (observer)
 	
@@ -113,6 +117,7 @@ public class EstadosListController implements Initializable, MudancaDados{ // A 
 			
 		} catch (IOException e) {
 			e.printStackTrace();
+			Alerta.mostrarAlerta("IO Exception", "Ao carregar tabela", e.getMessage(), AlertType.ERROR);
 			
 		}
 	}
@@ -163,15 +168,20 @@ public class EstadosListController implements Initializable, MudancaDados{ // A 
 }
 	
 	protected void removeEntidade(Estados obj) {
-		if(servico == null) {
-			throw new IllegalStateException("Serviço nulo");
-		}
-		try {
-			servico.remover(obj);
-			atualizaTabela();
-		}
-		catch(BdException e) {
-			e.printStackTrace();
-		}
+		Optional<ButtonType> resultado = Alerta.mostrarConfirmacao("Confirmar", "Tem certeza que deja excluir? ");
+		
+		if(resultado.get() == ButtonType.OK) {
+			if(servico == null) {
+				throw new IllegalStateException("Serviço nulo");
+			}
+			try {
+				servico.remover(obj);// remove
+				atualizaTabela();// atualiza tabela
+			}
+			catch(BdException e) {
+				e.printStackTrace();
+				Alerta.mostrarAlerta("Erro em remover objeto", null, e.getMessage(), AlertType.ERROR);
+			} 
+		}	
 	}
 }

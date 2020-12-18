@@ -34,7 +34,7 @@ public class PrincipalController implements Initializable{
 	
 	@FXML
 	public void acaoAjuda() {
-		
+		loadView("/view/Sobre.fxml", x -> {});
 	}
 
 	@Override

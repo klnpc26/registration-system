@@ -10,12 +10,14 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import listerner.MudancaDados;
 import model.entidades.Estados;
 import model.servicos.EstadosServico;
+import util.Alerta;
 import util.Restricoes;
 import util.Utils;
 
@@ -71,7 +73,7 @@ public class EstadosFormController implements Initializable{ // A classe que EMI
 			parentStage.close();
 		}
 		catch(BdException e) {
-			
+			Alerta.mostrarAlerta("Error saving object", null, e.getMessage(), AlertType.ERROR);
 		}
 	}
 	
