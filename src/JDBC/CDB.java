@@ -9,7 +9,7 @@ import java.sql.Statement;
 public class CDB {
     
     private static String driver = "com.mysql.jdbc.Driver";// responsavel por indentificar o serviço de banco de dados 
-    private static String URL = "jdbc:mysql://127.0.0.1:3306/sistemavideoaula";// responsavel por setar o local do banco de dados
+    private static String URL = "jdbc:mysql://127.0.0.1:3306/formulario";// responsavel por setar o local do banco de dados
     private static String user = "root";
     private static String pass = "kaique2613";
     
