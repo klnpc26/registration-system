@@ -1,14 +1,21 @@
 package model.entidades;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Estados {
+public class Estados implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
     
     private Integer id;
     private String nome_estado;
     private String uf;
     
     public Estados(){
+    }
+    
+    public Estados(Integer id){
+    	this.id = id;
     }
     
     public Estados(String nome_estado, String uf) {

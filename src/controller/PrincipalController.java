@@ -22,6 +22,9 @@ public class PrincipalController implements Initializable{
 	private MenuItem menuItemEstados;
 	
 	@FXML
+	private MenuItem menuItemCidade;
+	
+	@FXML
 	private MenuItem menuItemAjuda;
 	
 	@FXML
@@ -30,6 +33,11 @@ public class PrincipalController implements Initializable{
 			control.setEstadosServico(new EstadosServico());
 			control.atualizaTabela();
 		});
+	}
+	
+	@FXML
+	public void acaoCidade() {
+		
 	}
 	
 	@FXML
