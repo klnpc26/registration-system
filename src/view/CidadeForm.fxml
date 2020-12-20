@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="142.0" prefWidth="466.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EstadosFormController">
+<AnchorPane prefHeight="142.0" prefWidth="466.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CidadeFormController">
    <children>
       <GridPane prefHeight="120.0" prefWidth="380.0" AnchorPane.topAnchor="8.0">
         <columnConstraints>
@@ -40,7 +40,7 @@
                   <Insets top="3.0" />
                </padding>
             </HBox>
-            <ComboBox prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <ComboBox fx:id="comboEstados" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
          <padding>
             <Insets left="10.0" />

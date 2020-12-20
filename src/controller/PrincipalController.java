@@ -11,10 +11,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import model.servicos.CidadeServico;
 import model.servicos.EstadosServico;
+import util.Alerta;
 
 public class PrincipalController implements Initializable{
 	
@@ -37,7 +40,10 @@ public class PrincipalController implements Initializable{
 	
 	@FXML
 	public void acaoCidade() {
-		
+		loadView("/view/CidadeList.fxml", (CidadeListController control) -> {
+			control.setCidadeServico(new CidadeServico());
+			control.atualizaTabela();
+		});
 	}
 	
 	@FXML
@@ -66,7 +72,8 @@ public class PrincipalController implements Initializable{
 			initializingAction.accept(controller);// executa a funções que passar como argumento no loadView
 		}
 		catch (IOException e) {
-			
+			e.printStackTrace();
+			Alerta.mostrarAlerta("IO Exception", "Erro ao carregar janela", e.getMessage(), AlertType.ERROR);
 		}
 	}	
 }

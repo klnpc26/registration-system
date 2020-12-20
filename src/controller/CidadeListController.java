@@ -8,6 +8,8 @@ import java.util.ResourceBundle;
 
 import JDBC.BdException;
 import app.appFx;
+import dao.CidadeDao;
+import dao.DaoFactory;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,12 +32,16 @@ import javafx.stage.Stage;
 import listerner.MudancaDados;
 import model.entidades.Cidade;
 import model.entidades.Estados;
+import model.impl.CidadeJDBC;
 import model.servicos.CidadeServico;
+import model.servicos.EstadosServico;
 import util.Alerta;
 
 public class CidadeListController implements Initializable, MudancaDados{ // A classe que RECEBE o evento (observer)
 	
 	private CidadeServico servico;
+	
+	private Cidade obj;
 	
 	@FXML
 	private Button btNovo;
@@ -47,18 +53,19 @@ public class CidadeListController implements Initializable, MudancaDados{ // A c
 	private TableColumn<Cidade, Integer> columnId;
 	
 	@FXML
-	private TableColumn<Cidade, String> columnNome;
+	private TableColumn<Cidade, String> columnNome; 
 	
 	@FXML
 	private TableColumn<Cidade, Estados> columnEstados;
-	
+		
 	@FXML
 	private TableColumn<Cidade, Cidade> tableColumnEDITAR;
 	
 	@FXML
 	private TableColumn<Cidade, Cidade> tableColumnREMOVER;
 	
-	private ObservableList<Cidade> obsList;//Carrega os estados
+	
+	private ObservableList<Cidade> obsList;//Carrega as ciadades
 	
 	@FXML
 	public void acaoBotaoNovo(ActionEvent evento) {
@@ -78,21 +85,21 @@ public class CidadeListController implements Initializable, MudancaDados{ // A c
 	
 	private void initializeNodes() { //iniciar os comportamentos das colunas da tabela
 		columnId.setCellValueFactory(new PropertyValueFactory<>("id"));
-		columnNome.setCellValueFactory(new PropertyValueFactory<>("nome_estado"));
-		columnEstados.setCellValueFactory(new PropertyValueFactory<>("id_estado"));
+		columnNome.setCellValueFactory(new PropertyValueFactory<>("nome_cidade"));
+		columnEstados.setCellValueFactory(new PropertyValueFactory<>("estados"));
 		
 		//Fazer a tabela acompanhar a altura e largura da janela
 		Stage stage = (Stage) appFx.getMainScene().getWindow(); //pega a referencia para a janela
-		tableViewCidade.prefHeightProperty().bind(stage.heightProperty()); // A tablea acompanha a altura da janela 
+		tableViewCidade.prefHeightProperty().bind(stage.heightProperty()); // A tabela acompanha a altura da janela 
 	}
 	
-	public void atualizaTabela() { //acessa o serviço, carrega os estados e joga o estados dentro da ObservavleList, logo após associo ele com tableView.
+	public void atualizaTabela() { //acessa o serviço, carrega as cidades e joga o estados dentro da ObservavleList, logo após associo ele com tableView.
 		if(servico == null) {
 			throw new IllegalStateException("Serviço nulo");
 		}
 		List<Cidade> list = servico.encontrarTudo();// Pegou a lista de Cidade
 		obsList = FXCollections.observableArrayList(list);// joga os Cidade carregados dentro do obsList
-		tableViewCidade.setItems(obsList);// Mostra os estados na tabela
+		tableViewCidade.setItems(obsList);// Mostra as cidades na tabela
 		botaoEditar();
 		botaoRemover();
 	}
@@ -104,12 +111,13 @@ public class CidadeListController implements Initializable, MudancaDados{ // A c
 			
 			CidadeFormController controller = loader.getController();// Pega o controlador da tela que acabou de carregar, que é o formulário
 			controller.setCidade(obj);// injeta o Estado
-			controller.setCidadeServico(new CidadeServico());// injeta CidadeServico
+			controller.setServicos(new CidadeServico(), new EstadosServico());// injeta CidadeServico
+			controller.carregarObj();
 			controller.inscreverAlteracaoDados(this);
 			controller.attDadosForm();
 
 			Stage dialogStage = new Stage();// criar uma stage na frente do outro. Janela na frente de outra
-			dialogStage.setTitle("Enter Department data");// Configura o titulo da janela
+			dialogStage.setTitle("Entrar dados de cidade");// Configura o titulo da janela
 			dialogStage.setScene(new Scene(pane));// representa um novo conteúdo exibido dentro de uma janela
 			dialogStage.setResizable(false);// a janela não pode ser redimensionada
 			dialogStage.initOwner(parentStage);// quem é o Stage pai dessa janela

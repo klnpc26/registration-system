@@ -23,10 +23,10 @@
       <TableView fx:id="tableViewEstados" prefHeight="200.0" prefWidth="200.0">
         <columns>
           <TableColumn fx:id="columnId" prefWidth="75.0" text="Id" />
-          <TableColumn fx:id="columnNome" prefWidth="75.0" text="Nome" />
+          <TableColumn fx:id="columnNome" prefWidth="174.0" text="Nome" />
             <TableColumn fx:id="columnUf" prefWidth="75.0" text="UF" />
-            <TableColumn fx:id="tableColumnEDITAR" prefWidth="75.0" />
-            <TableColumn fx:id="tableColumnREMOVER" prefWidth="75.0" />
+            <TableColumn fx:id="tableColumnEDITAR" prefWidth="53.0" />
+            <TableColumn fx:id="tableColumnREMOVER" prefWidth="70.0" />
         </columns>
       </TableView>
    </children>

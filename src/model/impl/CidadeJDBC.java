@@ -95,14 +95,14 @@ public class CidadeJDBC implements CidadeDao{
     private Estados incrementandoEstados(ResultSet rs) throws SQLException { // Método para pegar os dados de estado
     	Estados est = new Estados();
     	est.setId(rs.getInt("id_estado"));
-    	est.setNome_estado("nome_estado");
+    	est.setNome_estado(rs.getString("EstadosNome"));
     	return est;
     }
     
     private Cidade incrementandoCidade(ResultSet rs, Estados est) throws SQLException { // Método para pegar os dados da cidade
     	Cidade cid = new Cidade();
         cid.setId(rs.getInt("id_cidade"));
-        cid.setNome_cidade(rs.getString("Estados"));
+        cid.setNome_cidade(rs.getString("nome_cidade"));
         cid.setEstados(est);
         return cid;
         
@@ -114,7 +114,7 @@ public class CidadeJDBC implements CidadeDao{
         ResultSet rs = null;
         
         try{
-            pst = conn.prepareStatement("select cidade.*,estados.nome_estado as Estados from cidade inner join estados on cidade.id_estado = estados.id_estado order by nome_estado;");
+            pst = conn.prepareStatement("select cidade.*,estados.nome_estado as EstadosNome from cidade inner join estados on cidade.id_estado = estados.id_estado order by nome_estado;");
             
             rs = pst.executeQuery();// o rs esta na posição 0
             

@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="297.0" prefWidth="685.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EstadosListController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="301.0" prefWidth="716.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CidadeListController">
    <children>
       <Label text="Cadastro de Cidades">
          <font>
@@ -20,13 +20,13 @@
           <Button fx:id="btNovo" mnemonicParsing="false" onAction="#acaoBotaoNovo" text="Novo" />
         </items>
       </ToolBar>
-      <TableView fx:id="tableViewEstados" prefHeight="200.0" prefWidth="200.0">
+      <TableView fx:id="tableViewCidade" prefHeight="205.0" prefWidth="205.0">
         <columns>
           <TableColumn fx:id="columnId" prefWidth="75.0" text="Id" />
-          <TableColumn fx:id="columnNome" prefWidth="75.0" text="Nome" />
-            <TableColumn fx:id="columnUf" prefWidth="75.0" text="Estados" />
-            <TableColumn fx:id="tableColumnEDITAR" prefWidth="75.0" />
-            <TableColumn fx:id="tableColumnREMOVER" prefWidth="75.0" />
+            <TableColumn fx:id="columnNome" prefWidth="174.0" text="Nome" />
+          <TableColumn fx:id="columnEstados" prefWidth="174.0" text="Estado" />
+            <TableColumn fx:id="tableColumnEDITAR" minWidth="1.0" prefWidth="53.0" />
+            <TableColumn fx:id="tableColumnREMOVER" minWidth="1.0" prefWidth="70.0"/>
         </columns>
       </TableView>
    </children>

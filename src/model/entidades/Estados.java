@@ -80,6 +80,6 @@ public class Estados implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Estados [id=" + id + ", nome_estado=" + nome_estado + ", uf=" + uf + "]";
+		return nome_estado;
 	}
 }

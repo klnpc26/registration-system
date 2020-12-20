@@ -9,6 +9,7 @@ public class Cidade implements Serializable{
     
     private Integer id;
     private String nome_cidade;
+    private String nomeEst;
     
     private Estados estados;
     
@@ -58,6 +59,14 @@ public class Cidade implements Serializable{
         hash = 13 * hash + Objects.hashCode(this.id);
         return hash;
     }
+	
+	public String getNomeEst() {
+		return nomeEst;
+	}
+
+	public void setNomeEst(String nomeEst) {
+		this.nomeEst = nomeEst;
+	}
 
     @Override
     public boolean equals(Object obj) {
@@ -81,6 +90,4 @@ public class Cidade implements Serializable{
 	public String toString() {
 		return "Cidade [id=" + id + ", nome_cidade=" + nome_cidade + ", estados=" + estados + "]";
 	}
-
-	
 }
