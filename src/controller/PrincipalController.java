@@ -15,6 +15,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import model.servicos.BairroServico;
 import model.servicos.CidadeServico;
 import model.servicos.EstadosServico;
 import util.Alerta;
@@ -26,6 +27,9 @@ public class PrincipalController implements Initializable{
 	
 	@FXML
 	private MenuItem menuItemCidade;
+	
+	@FXML
+	private MenuItem menuItemBairro;
 	
 	@FXML
 	private MenuItem menuItemAjuda;
@@ -42,6 +46,14 @@ public class PrincipalController implements Initializable{
 	public void acaoCidade() {
 		loadView("/view/CidadeList.fxml", (CidadeListController control) -> {
 			control.setCidadeServico(new CidadeServico());
+			control.atualizaTabela();
+		});
+	}
+	
+	@FXML
+	public void acaoBairro() {
+		loadView("/view/BairroList.fxml", (BairroListController control) -> {
+			control.setBairroServico(new BairroServico());
 			control.atualizaTabela();
 		});
 	}

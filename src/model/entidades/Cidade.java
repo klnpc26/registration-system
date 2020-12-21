@@ -16,6 +16,10 @@ public class Cidade implements Serializable{
     public Cidade(){
     }
     
+    public Cidade(Integer id) {
+		this.id = id;
+	}
+    
     public Cidade(String nome_cidade, Estados estados) {
 		super();
 		this.nome_cidade = nome_cidade;
@@ -88,6 +92,6 @@ public class Cidade implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Cidade [id=" + id + ", nome_cidade=" + nome_cidade + ", estados=" + estados + "]";
+		return nome_cidade;
 	}
 }

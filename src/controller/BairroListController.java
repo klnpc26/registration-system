@@ -8,8 +8,6 @@ import java.util.ResourceBundle;
 
 import JDBC.BdException;
 import app.appFx;
-import dao.CidadeDao;
-import dao.DaoFactory;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,51 +28,55 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import listerner.MudancaDados;
+import model.entidades.Bairro;
 import model.entidades.Cidade;
 import model.entidades.Estados;
-import model.impl.CidadeJDBC;
+import model.servicos.BairroServico;
 import model.servicos.CidadeServico;
 import model.servicos.EstadosServico;
 import util.Alerta;
 
-public class CidadeListController implements Initializable, MudancaDados{ // A classe que RECEBE o evento (observer)
+public class BairroListController implements Initializable, MudancaDados{ // A classe que RECEBE o evento (observer)
 	
-	private CidadeServico servico;
+	private BairroServico servico;
 	
-	private Cidade obj;
+	private Bairro obj;
 	
 	@FXML
 	private Button btNovo;
 	
 	@FXML
-	private TableView<Cidade> tableViewCidade;
+	private TableView<Bairro> tableViewBairro;
 	
 	@FXML
-	private TableColumn<Cidade, Integer> columnId;
+	private TableColumn<Bairro, Integer> columnId;
 	
 	@FXML
-	private TableColumn<Cidade, String> columnNome; 
+	private TableColumn<Bairro, String> columnNome; 
 	
 	@FXML
-	private TableColumn<Cidade, Estados> columnEstados;
+	private TableColumn<Bairro, Cidade> columnCidade;
+	
+	@FXML
+	private TableColumn<Bairro, Estados> columnEstados;
 		
 	@FXML
-	private TableColumn<Cidade, Cidade> tableColumnEDITAR;
+	private TableColumn<Bairro, Bairro> tableColumnEDITAR;
 	
 	@FXML
-	private TableColumn<Cidade, Cidade> tableColumnREMOVER;
+	private TableColumn<Bairro, Bairro> tableColumnREMOVER;
 	
 	
-	private ObservableList<Cidade> obsList;//Carrega as ciadades
+	private ObservableList<Bairro> obsList;//Carrega as ciadades
 	
 	@FXML
 	public void acaoBotaoNovo(ActionEvent evento) {
-		Stage parentStage = (Stage) ((Node) evento.getSource()).getScene().getWindow();// acessa o Stage do botão novo, ou seja, abre o stage do formulário de Cidade. 
-		Cidade obj = new Cidade();// Instanciar uma Cidade vazio
-		formDialogo(obj, "/view/CidadeForm.fxml", parentStage);
+		Stage parentStage = (Stage) ((Node) evento.getSource()).getScene().getWindow();// acessa o Stage do botão novo, ou seja, abre o stage do formulário de Bairro. 
+		Bairro obj = new Bairro();// Instanciar uma Bairro vazio
+		formDialogo(obj, "/view/BairroForm.fxml", parentStage);
 	}
 	
-	public void setCidadeServico(CidadeServico servico) {
+	public void setBairroServico(BairroServico servico) {
 		this.servico = servico;
 	}
 	
@@ -85,39 +87,40 @@ public class CidadeListController implements Initializable, MudancaDados{ // A c
 	
 	private void initializeNodes() { //iniciar os comportamentos das colunas da tabela
 		columnId.setCellValueFactory(new PropertyValueFactory<>("id"));
-		columnNome.setCellValueFactory(new PropertyValueFactory<>("nome_cidade"));
+		columnNome.setCellValueFactory(new PropertyValueFactory<>("nome_bairro"));
+		columnCidade.setCellValueFactory(new PropertyValueFactory<>("cidade"));
 		columnEstados.setCellValueFactory(new PropertyValueFactory<>("estados"));
 		
 		//Fazer a tabela acompanhar a altura e largura da janela
 		Stage stage = (Stage) appFx.getMainScene().getWindow(); //pega a referencia para a janela
-		tableViewCidade.prefHeightProperty().bind(stage.heightProperty()); // A tabela acompanha a altura da janela 
+		tableViewBairro.prefHeightProperty().bind(stage.heightProperty()); // A tabela acompanha a altura da janela 
 	}
 	
 	public void atualizaTabela() { //acessa o serviço, carrega as cidades e joga o estados dentro da ObservavleList, logo após associo ele com tableView.
 		if(servico == null) {
 			throw new IllegalStateException("Serviço nulo");
 		}
-		List<Cidade> list = servico.encontrarTudo();// Pegou a lista de Cidade
-		obsList = FXCollections.observableArrayList(list);// joga os Cidade carregados dentro do obsList
-		tableViewCidade.setItems(obsList);// Mostra as cidades na tabela
+		List<Bairro> list = servico.encontrarTudo();// Pegou a lista de Bairro
+		obsList = FXCollections.observableArrayList(list);// joga os Bairro carregados dentro do obsList
+		tableViewBairro.setItems(obsList);// Mostra as cidades na tabela
 		botaoEditar();
 		botaoRemover();
 	}
 	
-	private void formDialogo(Cidade obj, String absoluteName, Stage parentStage) {
+	private void formDialogo(Bairro obj, String absoluteName, Stage parentStage) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));//abre uma tela
 			Pane pane = loader.load();// carrega a view
 			
-			CidadeFormController controller = loader.getController();// Pega o controlador da tela que acabou de carregar, que é o formulário
-			controller.setCidade(obj);// injeta o Estado
-			controller.setServicos(new CidadeServico(), new EstadosServico());// injeta CidadeServico e EstadoServico
+			BairroFormController controller = loader.getController();// Pega o controlador da tela que acabou de carregar, que é o formulário
+			controller.setBairro(obj);// injeta o Estado
+			controller.setServicos(new BairroServico(), new CidadeServico(), new EstadosServico());// injeta BairroServico e EstadoServico
 			controller.carregarObj(); // carrega os Estados do bnco de dados e deixar no controller
 			controller.inscreverAlteracaoDados(this);
 			controller.attDadosForm();
 
 			Stage dialogStage = new Stage();// criar uma stage na frente do outro. Janela na frente de outra
-			dialogStage.setTitle("Entrar dados de cidade");// Configura o titulo da janela
+			dialogStage.setTitle("Entrar dados de Bairro");// Configura o titulo da janela
 			dialogStage.setScene(new Scene(pane));// representa um novo conteúdo exibido dentro de uma janela
 			dialogStage.setResizable(false);// a janela não pode ser redimensionada
 			dialogStage.initOwner(parentStage);// quem é o Stage pai dessa janela
@@ -138,11 +141,11 @@ public class CidadeListController implements Initializable, MudancaDados{ // A c
 	
 	public void botaoEditar() { // criar um botão de edição em cada linha da tabela
 		tableColumnEDITAR.setCellValueFactory(x -> new ReadOnlyObjectWrapper<>(x.getValue()));
-		tableColumnEDITAR.setCellFactory(x -> new TableCell<Cidade, Cidade>() {
+		tableColumnEDITAR.setCellFactory(x -> new TableCell<Bairro, Bairro>() {
 				private final Button bt = new Button("Editar");
 				
 				@Override
-				protected void updateItem(Cidade obj, boolean vazia) {
+				protected void updateItem(Bairro obj, boolean vazia) {
 					super.updateItem(obj, vazia);
 					
 					if(obj == null) {
@@ -152,18 +155,18 @@ public class CidadeListController implements Initializable, MudancaDados{ // A c
 					setGraphic(bt);
 					bt.setOnAction(
 					evento -> formDialogo(
-							obj, "/view/CidadeForm.fxml", (Stage) ((Node) evento.getSource()).getScene().getWindow()));// Quando clicar no botão "Editar" vai abrir o formulário de edição
+							obj, "/view/BairroForm.fxml", (Stage) ((Node) evento.getSource()).getScene().getWindow()));// Quando clicar no botão "Editar" vai abrir o formulário de edição
 				}
 		});
 	}
 	
 	public void botaoRemover() {
 		tableColumnREMOVER.setCellValueFactory(x -> new ReadOnlyObjectWrapper<>(x.getValue()));
-		tableColumnREMOVER.setCellFactory(x -> new TableCell<Cidade, Cidade>() {
+		tableColumnREMOVER.setCellFactory(x -> new TableCell<Bairro, Bairro>() {
 			private final Button bt = new Button("Remover");
 			
 			@Override
-			protected void updateItem(Cidade obj, boolean vazia) {
+			protected void updateItem(Bairro obj, boolean vazia) {
 				super.updateItem(obj, vazia);
 				
 				if(obj == null) {
@@ -171,12 +174,12 @@ public class CidadeListController implements Initializable, MudancaDados{ // A c
 					return;
 				}
 				setGraphic(bt);
-				bt.setOnAction(x -> removeEntidade(obj));// Quando clicar no botão "Remover" vai remover Cidade
+				bt.setOnAction(x -> removeEntidade(obj));// Quando clicar no botão "Remover" vai remover Bairro
 			}
 	});
 }
 	
-	protected void removeEntidade(Cidade obj) {
+	protected void removeEntidade(Bairro obj) {
 		Optional<ButtonType> resultado = Alerta.mostrarConfirmacao("Confirmar", "Tem certeza que deja excluir? ");
 		
 		if(resultado.get() == ButtonType.OK) {

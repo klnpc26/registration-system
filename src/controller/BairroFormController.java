@@ -21,21 +21,25 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import listerner.MudancaDados;
+import model.entidades.Bairro;
 import model.entidades.Cidade;
 import model.entidades.Estados;
+import model.servicos.BairroServico;
 import model.servicos.CidadeServico;
 import model.servicos.EstadosServico;
 import util.Alerta;
 import util.Restricoes;
 import util.Utils;
 
-public class CidadeFormController implements Initializable{ // A classe que EMITE o evento (subject)
+public class BairroFormController implements Initializable{ // A classe que EMITE o evento (subject)
 	
-	private Cidade entidade;
+	private Bairro entidade;
 	
-	private CidadeServico servico;
+	private BairroServico servico;
 	
 	private EstadosServico estado; // buscar os dados no banco de dados 
+	
+	private CidadeServico cidade; // buscar os dados no banco de dados 
 	
 	private List<MudancaDados> mudancaDados = new ArrayList<>();// a classe vai guardar uma lista de objetos interessados em receber o evento
 	
@@ -44,6 +48,9 @@ public class CidadeFormController implements Initializable{ // A classe que EMIT
 	
 	@FXML
 	private TextField txtNome;
+	
+	@FXML
+	private ComboBox<Cidade> comboCidade;
 	
 	@FXML
 	private ComboBox<Estados> comboEstados;
@@ -55,14 +62,18 @@ public class CidadeFormController implements Initializable{ // A classe que EMIT
 	private Button btCancelar;
 	
 	@FXML
-	private ObservableList<Estados> obsList;
+	private ObservableList<Cidade> obsListCidade;
 	
-	public void setCidade(Cidade entidade) {
+	@FXML
+	private ObservableList<Estados> obsListEstados;
+	
+	public void setBairro(Bairro entidade) {
 		this.entidade = entidade;
 	}
 	
-	public void setServicos(CidadeServico c, EstadosServico e) {
-		this.servico = c;
+	public void setServicos(BairroServico b, CidadeServico c, EstadosServico e) {
+		this.servico = b;
+		this.cidade = c;
 		this.estado = e;
 	}
 	
@@ -97,11 +108,12 @@ public class CidadeFormController implements Initializable{ // A classe que EMIT
 		}
 	}
 
-	private Cidade getDadosForm() { // Responsável por pegar os dados que estão nas caixa de texto do formulário e retornar um novo objeto
-		Cidade obj = new Cidade();
+	private Bairro getDadosForm() { // Responsável por pegar os dados que estão nas caixa de texto do formulário e retornar um novo objeto
+		Bairro obj = new Bairro();
 		
 		obj.setId(Utils.convertInt(txtId.getText()));	
-		obj.setNome_cidade(txtNome.getText());
+		obj.setNome_bairro(txtNome.getText());
+		obj.setCidade(comboCidade.getValue());
 		obj.setEstados(comboEstados.getValue());
 		
 		return obj;
@@ -122,7 +134,20 @@ public class CidadeFormController implements Initializable{ // A classe que EMIT
 		Restricoes.setTextFieldInteger(txtId);
 		Restricoes.setTextFieldMaxLength(txtNome, 30);
 		
+		initializeComboCidade();
 		initializeComboEstados();
+	}
+	
+	private void initializeComboCidade() {
+		Callback<ListView<Cidade>, ListCell<Cidade>> factory = lv -> new ListCell<Cidade>() {
+			@Override
+			protected void updateItem(Cidade item, boolean empty) {
+				super.updateItem(item, empty);
+				setText(empty ? "" : item.getNome_cidade());
+			}
+		};
+		comboCidade.setCellFactory(factory);
+		comboCidade.setButtonCell(factory.call(null));
 	}
 	
 	private void initializeComboEstados() {
@@ -138,29 +163,42 @@ public class CidadeFormController implements Initializable{ // A classe que EMIT
 	}
 		
 
-	public void attDadosForm() { // responsável por pegar os dados dos Cidade e popular as caixas de texto (TextField) do formulário
+	public void attDadosForm() { // responsável por pegar os dados dos Bairro e popular as caixas de texto (TextField) do formulário
 		if(entidade == null) {
 			throw new IllegalStateException("Entidade nula");
 		}
 		
 		txtId.setText(String.valueOf(entidade.getId()));
-		txtNome.setText(entidade.getNome_cidade());
+		txtNome.setText(entidade.getNome_bairro());
+		
+		if(entidade.getCidade() == null) {
+			comboCidade.getSelectionModel().selectFirst(); // define que o ComboBox estaja selecionado no 1° elemento 
+		}
+		else{
+			comboCidade.setValue(entidade.getCidade()); // A Cidade que estiver associado com a Bairro vai para o comboBox
+		}
 		
 		if(entidade.getEstados() == null) {
 			comboEstados.getSelectionModel().selectFirst(); // define que o ComboBox estaja selecionado no 1° elemento 
 		}
 		else{
-			comboEstados.setValue(entidade.getEstados()); // o Estado que estiver associado com a Cidade vai para o comboBox
+			comboEstados.setValue(entidade.getEstados()); // o Estado que estiver associado com a Bairro vai para o comboBox
 		}
 	}
 	
 	public void carregarObj() { // Responsável por chamar os Estados e carregar os Estados do banco de dados preenchendo a Lista "obsList" com esses Estados 
+		if(cidade == null) {
+			throw new IllegalStateException("CidadeServico nulo");
+		}
 		if(estado == null) {
 			throw new IllegalStateException("EstadosServico nulo");
 		}
 		
-		List<Estados> list = estado.encontrarTudo(); // carrega os estados do banco de dados
-		obsList = FXCollections.observableArrayList(list);
-		comboEstados.setItems(obsList);
+		List<Cidade> cid = cidade.encontrarTudo(); // carrega as cidades do banco de dados
+		List<Estados> est = estado.encontrarTudo(); // carrega os estados do banco de dados
+		obsListCidade = FXCollections.observableArrayList(cid);
+		obsListEstados = FXCollections.observableArrayList(est);
+		comboCidade.setItems(obsListCidade);
+		comboEstados.setItems(obsListEstados);
 	}
 }
